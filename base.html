@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#16834a">
+  <title>{% block title %}Maketek{% endblock %} · Maketek</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">M</span><span><b>maketek</b><small>Gestão inteligente de stock</small></span></a>
+    <div class="nav-caption">PRINCIPAL</div>
+    <nav class="nav">
+      <a class="{{ 'active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}"><span>▦</span> Visão geral</a>
+      <a href="{{ url_for('dashboard') }}"><span>▤</span> Produtos</a>
+      <a class="{{ 'active' if request.endpoint == 'movements' else '' }}" href="{{ url_for('movements') }}"><span>↕</span> Movimentações</a>
+      <a href="{{ url_for('dashboard', status='low') }}"><span>◉</span> Reposição</a>
+      <a href="{{ url_for('export_products') }}"><span>⇩</span> Exportar catálogo</a>
+      <a href="{{ url_for('export_movements') }}"><span>⇩</span> Exportar histórico</a>
+    </nav>
+    <div class="sidebar-bottom"><span class="dot"></span> Maketek · {{ 'Demonstração' if demo_storage else 'Base de dados externa' }}<p>Controlo claro. Decisões melhores.</p></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="breadcrumb">Maketek <span>/</span> {% block crumb %}Visão geral{% endblock %}</div>
+      <div class="top-actions"><span class="currency">{{ app_currency }}</span>{% if auth_enabled and is_logged_in %}<form method="post" action="{{ url_for('logout') }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button ghost small">Terminar sessão</button></form>{% endif %}<div class="avatar">{{ (session.get('operator','A')[:1] or 'A')|upper }}</div></div>
+    </header>
+    {% if demo_storage %}<div class="notice warning"><b>Modo demonstração:</b> esta instalação usa SQLite local. No Render Free, os dados podem desaparecer após reinício, inatividade ou novo deploy. Não guardes aqui o inventário real. <a href="{{ url_for('dashboard') }}">Entendi</a></div>{% endif %}
+    <div class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flashes">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button type="button" class="dismiss" aria-label="Fechar">×</button></div>{% endfor %}</div>{% endif %}{% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+    <footer class="footer">MAKETEK <span>·</span> Gestão simples, decisões melhores.</footer>
+  </main>
+</div>
+</body>
+</html>

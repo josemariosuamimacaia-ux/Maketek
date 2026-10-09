@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Movimentações{% endblock %}
+{% block crumb %}Movimentações{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">AUDITORIA</p><h1>Histórico de movimentações</h1><p class="muted">Consulta as alterações de stock sem apagar os registos anteriores.</p></div><a class="button secondary" href="{{ url_for('export_movements') }}">↓ Exportar CSV</a></section>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>DATA</th><th>PRODUTO</th><th>TIPO</th><th>VARIAÇÃO</th><th>ANTES</th><th>DEPOIS</th><th>MOTIVO / REFERÊNCIA</th><th>OPERADOR</th></tr></thead><tbody>
+{% for m in movements %}<tr><td>{{ m.created_at|dt }}</td><td><b>{{ m.product.name }}</b><small class="block muted">{{ m.product.sku }}</small></td><td>{{ m.kind|title }}</td><td class="{{ 'positive' if m.quantity_delta > 0 else 'negative' if m.quantity_delta < 0 else '' }}">{{ '+' if m.quantity_delta > 0 else '' }}{{ m.quantity_delta }}</td><td>{{ m.before_qty }}</td><td><b>{{ m.after_qty }}</b></td><td>{{ m.reason or '—' }}<small class="block muted">{{ m.reference }}</small></td><td>{{ m.operator }}</td></tr>
+{% else %}<tr><td colspan="8" class="empty">Ainda não há movimentações. Regista uma entrada, saída ou contagem num produto.</td></tr>{% endfor %}
+</tbody></table></div><div class="table-foot">Máximo de 500 registos mais recentes nesta página.</div></section>
+{% endblock %}

@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block title %}Erro {{ code }}{% endblock %}{% block content %}<section class="error-card panel"><div class="error-code">{{ code }}</div><h1>Não foi possível concluir.</h1><p class="muted">{{ message }}</p><a class="button primary" href="{{ url_for('dashboard') }}">Voltar ao painel</a></section>{% endblock %}

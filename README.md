@@ -25,6 +25,12 @@ Maketek é uma aplicação web em português, com verde como cor principal, pens
 6. Faz o deploy e abre o endereço `onrender.com`.
 7. Para experimentar, abre `/demo` uma vez para carregar produtos de exemplo. Depois podes criar os teus próprios produtos.
 
+### Se o teu serviço já está configurado como Docker
+
+O repositório precisa de ter o ficheiro `Dockerfile` na raiz — ao lado de `app.py` e `requirements.txt`. Esta versão inclui esse ficheiro e `.dockerignore`. Envia ambos para o GitHub e volta a fazer deploy. No Render, confirma que **Dockerfile Path** está definido como `./Dockerfile` e que o **Root Directory** está vazio (raiz do repositório).
+
+Se preferires usar a configuração `render.yaml` deste pacote, cria um serviço novo através de **New → Blueprint**: o YAML está configurado para o runtime nativo Python, não Docker.
+
 Comandos alternativos se criares o serviço manualmente:
 - **Build Command:** `pip install -r requirements.txt`
 - **Start Command:** `gunicorn app:app --workers 1 --threads 4 --timeout 120`
